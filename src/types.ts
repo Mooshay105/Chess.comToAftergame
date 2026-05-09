@@ -34,6 +34,7 @@ export type Game = {
 export type Config = {
 	apiUrl: string;
 	bearerToken: string;
+	refreshToken: string;
 	uploadDay: number;
 	userData: {
 		[username: string]: UserData;
@@ -53,4 +54,21 @@ export type UserData = {
 	usernameLower: string;
 	id: string;
 	shouldScrapeGames: boolean;
+};
+
+export type RefreshTokenResponse = {
+	errors?: [
+		{
+			message: string;
+			locations: [[any, any]];
+			path: [string];
+			extensions: [Object];
+		},
+	];
+	data: {
+		refreshTokens: {
+			accessToken: string;
+			refreshToken: string;
+		};
+	};
 };

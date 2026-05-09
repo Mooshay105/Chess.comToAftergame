@@ -1,0 +1,35 @@
+{
+	"uploadDay": 3,
+	"apiUrl": "https://api.aftergame.co/graphql",
+	"bearerToken": "key here",
+	"refreshToken": "key here",
+	"users": ["Magnus", "Hikaru", "Levy"],
+	"userData": {
+		"magnus": {
+			"username": "Magnus",
+			"usernameLower": "magnus",
+			"id": "uuid",
+			"shouldScrapeGames": true
+		},
+		"hikaru": {
+			"username": "Hikaru",
+			"usernameLower": "hikaru",
+			"id": "uuid",
+			"shouldScrapeGames": true
+		},
+		"levy": {
+			"username": "Levy",
+			"usernameLower": "levy",
+			"id": "uuid",
+			"shouldScrapeGames": true
+		}
+	},
+	"GUEST_USER_ID": "99d4d25e-db38-4ce4-9a25-41683375a5ef",
+	"definitions": {
+		"GAME_DEFINITION_ID": "6bb74b4e-3844-4a9b-9204-b87d4524ba58",
+		"CHESS_GAME_ID": "153a33c2-e811-44c3-a0a9-63d735ad8923",
+		"COLOUR_PROPERTY_ID": "dd0cf5f0-ebcd-4529-847d-36d841d033fc",
+		"WHITE_VALUE_ID": "d2d34a4f-b44d-49c8-8fac-2febd21d8654",
+		"BLACK_VALUE_ID": "3b4329d2-0d68-40c4-905a-15f19a1be455"
+	}
+}
