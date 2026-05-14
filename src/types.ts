@@ -4,7 +4,7 @@ export type Game = {
 	time_control: string;
 	end_time: number;
 	rated: boolean;
-	accuracies: {
+	accuracies?: {
 		white: number;
 		black: number;
 	};

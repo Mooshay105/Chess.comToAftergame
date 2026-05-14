@@ -19,6 +19,31 @@ const DRAW_RESULTS = new Set([
 	"timevsinsufficient",
 ]);
 
+function getPlayTime(game: Game): Number {
+	const trimmed = game.pgn.trim();
+	if (!trimmed) return 0;
+
+	const headers: Record<string, string> = {};
+	for (const match of trimmed.matchAll(/\[(\w+)\s+"([^"]*)"\]/g)) {
+		headers[match[1]] = match[2];
+	}
+
+	if (!headers.White || !headers.Black || !headers.Result) return 0;
+
+	const pgnGame = { headers, text: trimmed };
+
+	if (!pgnGame) return 0;
+	const startDay = pgnGame.headers.UTCDate;
+	const startTime = pgnGame.headers.StartTime;
+	const endDay = pgnGame.headers.EndDate;
+	const endTime = pgnGame.headers.EndTime;
+
+	const startDate = new Date(startDay.replace(/\./g, "-") + "T" + startTime);
+	const endDate = new Date(endDay.replace(/\./g, "-") + "T" + endTime);
+
+	return (endDate.getTime() - startDate.getTime()) / 1000;
+}
+
 function chessComResult(result: string): number | null {
 	if (WIN_RESULTS.has(result)) return 1;
 	if (DRAW_RESULTS.has(result)) return null;
@@ -71,10 +96,12 @@ async function postGame(game: Game, userData: UserData): Promise<void> {
 				},
 			],
 		},
+		isPlayer: true,
 		inputScore2: null,
 		outputRole: iAmWhite ? "White" : "Black",
 		outputScore: null,
 		result: chessComResult(myPlayer.result),
+		...(iAmWhite ? { turnOrder: 1 } : {}),
 		type: "PLAYER",
 	};
 
@@ -92,10 +119,12 @@ async function postGame(game: Game, userData: UserData): Promise<void> {
 				},
 			],
 		},
+		isPlayer: true,
 		inputScore2: null,
 		outputRole: iAmWhite ? "Black" : "White",
 		outputScore: null,
 		result: chessComResult(opponentPlayer.result),
+		...(!iAmWhite ? { turnOrder: 1 } : {}),
 		type: "PLAYER",
 	};
 
@@ -111,6 +140,7 @@ async function postGame(game: Game, userData: UserData): Promise<void> {
 			variables: {
 				input: {
 					comment: "On Chess.com: " + game.url,
+					durationSeconds: getPlayTime(game),
 					gameDefinitionId: config.definitions.GAME_DEFINITION_ID,
 					gameIds: [config.definitions.CHESS_GAME_ID],
 					inputScenario: null,
